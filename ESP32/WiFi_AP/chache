@@ -1,0 +1,87 @@
+esptool.py  --port /dev/ttyUSB0 erase_flash && esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 ~/Downloads/esp32-20220117-v1.18.bin
+
+
+'''
+Name        : WiFi AP web server
+Date        : 26/Apr/2023
+Brief       : Configure ESP32 as an access point and host a web page.
+Tested      : OK
+Developer   : Rohit Akurdekar
+Note        : Connect your device to MicroPython network and open 192.168.4.1 in your browser 
+'''
+
+import socket
+
+import network
+
+import esp
+esp.osdebug(None)
+
+import gc
+gc.collect()
+
+from machine import Pin
+
+SSID = 'MicroPython-AP1'
+PASSWORD = '123456789'
+
+'''
+Name    : SoftApconfig()
+Params  : ssid and password  
+Brief   : Configure esp32 as an access point with given ssid and password
+Tested  : OK
+Note    :
+'''
+# def SoftAPconfig(ssid,password):
+ap = network.WLAN(network.AP_IF)
+ap.active(True)
+ap.config(essid=SSID, password=PASSWORD)
+
+while ap.active() == False:
+    pass
+
+print('Connection successful')
+print(ap.ifconfig())
+
+'''
+Name    : web_page()
+Params  : None  
+Brief   : Html code
+Tested  : OK
+Note    :
+'''
+def web_page():
+  html = """
+  <html>
+    <head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+    <body><h1>Hello, World!</h1></body>
+  </html>"""
+  return html
+
+'''
+Name    : socketBinding()
+Params  : None  
+Brief   : Bind socket and host web page
+Tested  : OK
+Note    :
+'''
+# def socketBinding():
+# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# s.bind(('', 80))
+# s.listen(5)
+
+# while True:
+#     led = Pin(2, Pin.OUT)
+#     led.value(1)
+#     conn, addr = s.accept()
+#     print('Got a connection from %s' % str(addr))
+#     request = conn.recv(1024)
+#     print('Content = %s' % str(request))
+#     response = web_page()
+#     conn.send(response)
+#     conn.close()
+
+# if __name__=="__main__":
+#   led = Pin(2, Pin.OUT, value=1)
+#   SoftAPconfig(ssid=SSID,password=PASSWORD)
+#   socketBinding()     
