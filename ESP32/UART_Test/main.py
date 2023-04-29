@@ -5,7 +5,6 @@
 
 # Load the machine module in order to access the hardware
 import machine
-import ..Blink_LED
 
 
 # Create the led object in GPIO 2
